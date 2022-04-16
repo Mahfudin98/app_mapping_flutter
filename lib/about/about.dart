@@ -1,3 +1,4 @@
+import 'package:app_mapping/constants.dart';
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
@@ -5,13 +6,24 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
-        child: Text(
-          "About Page",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
+        child: Container(
+          margin: const EdgeInsets.only(
+            top: kDefaultPadding * 3,
+            left: kDefaultPadding,
+            right: kDefaultPadding,
+          ),
+          height: size.height,
+          child: Column(
+            children: [
+              Image.asset("assets/images/logo.png"),
+              SizedBox(height: 20),
+              Text(
+                "Aplikasi ini dibuat untuk memenuhi syarat kelulusan S1 Informatika",
+              ),
+            ],
           ),
         ),
       ),

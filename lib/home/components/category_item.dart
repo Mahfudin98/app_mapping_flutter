@@ -30,7 +30,7 @@ class CategoryItem extends StatelessWidget {
           CategoryMenu(
             image: 'assets/images/bangunan.png',
             press: () {},
-            title: 'Bangunan',
+            title: 'Gedung',
           ),
         ],
       ),

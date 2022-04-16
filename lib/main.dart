@@ -38,7 +38,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectIndex = 0;
-  static const List<Widget> _widgetOption = [
+  static List<Widget> _widgetOption = [
     HomePage(),
     MappingPage(),
     SavedPage(),
