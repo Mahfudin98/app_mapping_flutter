@@ -24,63 +24,63 @@ class MyApp extends StatelessWidget {
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const MainPage(),
+      home: HomePage(),
     );
   }
 }
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+// class MainPage extends StatefulWidget {
+//   const MainPage({Key? key}) : super(key: key);
 
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
+//   @override
+//   State<MainPage> createState() => _MainPageState();
+// }
 
-class _MainPageState extends State<MainPage> {
-  int _selectIndex = 0;
-  static List<Widget> _widgetOption = [
-    HomePage(),
-    MappingPage(),
-    SavedPage(),
-    AboutPage(),
-  ];
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectIndex = index;
-    });
-  }
+// class _MainPageState extends State<MainPage> {
+//   int _selectIndex = 0;
+//   static List<Widget> _widgetOption = [
+//     HomePage(),
+//     MappingPage(),
+//     SavedPage(),
+//     AboutPage(),
+//   ];
+//   void _onItemTapped(int index) {
+//     setState(() {
+//       _selectIndex = index;
+//     });
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: _widgetOption.elementAt(_selectIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Mapping',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.airplay),
-            label: 'List',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.info_outline),
-            label: 'Info',
-          ),
-        ],
-        currentIndex: _selectIndex,
-        unselectedItemColor: kTextColor,
-        selectedItemColor: kPrimaryColor,
-        onTap: _onItemTapped,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Container(
+//         child: _widgetOption.elementAt(_selectIndex),
+//       ),
+//       bottomNavigationBar: BottomNavigationBar(
+//         elevation: 0,
+//         items: const <BottomNavigationBarItem>[
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.home),
+//             label: 'Home',
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.map),
+//             label: 'Mapping',
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.airplay),
+//             label: 'List',
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.info_outline),
+//             label: 'Info',
+//           ),
+//         ],
+//         currentIndex: _selectIndex,
+//         unselectedItemColor: kTextColor,
+//         selectedItemColor: kPrimaryColor,
+//         onTap: _onItemTapped,
+//       ),
+//     );
+//   }
+// }

@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:app_mapping/components/sidebar/sidebar.dart';
 import 'package:app_mapping/constants.dart';
 import 'package:app_mapping/maping/direction_reporitory.dart';
 import 'package:app_mapping/maping/directions_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MappingPage extends StatefulWidget {
@@ -33,50 +35,8 @@ class _MappingPageState extends State<MappingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: const Text(
-          'Google Maps',
-          style: TextStyle(color: kTextColor),
-        ),
-        backgroundColor: kBackgroundColor,
-        actions: [
-          if (_origin != null)
-            TextButton(
-              onPressed: () => _googleMapController.animateCamera(
-                CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                    target: _origin!.position,
-                    zoom: 14.5,
-                    tilt: 50.0,
-                  ),
-                ),
-              ),
-              style: TextButton.styleFrom(
-                primary: Colors.green,
-                textStyle: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              child: const Text('ORIGIN'),
-            ),
-          if (_destination != null)
-            TextButton(
-              onPressed: () => _googleMapController.animateCamera(
-                CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                    target: _destination!.position,
-                    zoom: 14.5,
-                    tilt: 50.0,
-                  ),
-                ),
-              ),
-              style: TextButton.styleFrom(
-                primary: Colors.blue,
-                textStyle: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              child: const Text('DEST'),
-            )
-        ],
-      ),
+      appBar: buildAppBar(),
+      drawer: Sidebar(),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -85,22 +45,22 @@ class _MappingPageState extends State<MappingPage> {
             zoomControlsEnabled: false,
             initialCameraPosition: _initialCameraPosition,
             onMapCreated: (controller) => _googleMapController = controller,
-            markers: {
-              if (_origin != null) _origin!,
-              if (_destination != null) _destination!
-            },
-            polylines: {
-              if (_info != null)
-                Polyline(
-                  polylineId: const PolylineId('overview_polyline'),
-                  color: Colors.red,
-                  width: 5,
-                  points: _info!.polylinePoints
-                      .map((e) => LatLng(e.latitude, e.longitude))
-                      .toList(),
-                ),
-            },
-            onLongPress: _addMarker,
+            // markers: {
+            //   if (_origin != null) _origin!,
+            //   if (_destination != null) _destination!
+            // },
+            // polylines: {
+            //   if (_info != null)
+            //     Polyline(
+            //       polylineId: const PolylineId('overview_polyline'),
+            //       color: Colors.red,
+            //       width: 5,
+            //       points: _info!.polylinePoints
+            //           .map((e) => LatLng(e.latitude, e.longitude))
+            //           .toList(),
+            //     ),
+            // },
+            // onLongPress: _addMarker,
           ),
           if (_info != null)
             Positioned(
@@ -145,40 +105,99 @@ class _MappingPageState extends State<MappingPage> {
     );
   }
 
-  void _addMarker(LatLng pos) async {
-    if (_origin == null || (_origin != null && _destination != null)) {
-      // Origin is not set OR Origin/Destination are both set
-      // Set origin
-      setState(() {
-        _origin = Marker(
-          markerId: const MarkerId('origin'),
-          infoWindow: const InfoWindow(title: 'Origin'),
-          icon:
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-          position: pos,
-        );
-        // Reset destination
-        _destination = null;
-
-        // Reset info
-        _info = null;
-      });
-    } else {
-      // Origin is already set
-      // Set destination
-      setState(() {
-        _destination = Marker(
-          markerId: const MarkerId('destination'),
-          infoWindow: const InfoWindow(title: 'Destination'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          position: pos,
-        );
-      });
-
-      // Get directions
-      final directions = await DirectionsRepository()
-          .getDirections(origin: _origin!.position, destination: pos);
-      setState(() => _info = directions);
-    }
+  AppBar buildAppBar() {
+    return AppBar(
+      leading: Builder(
+        builder: (BuildContext context) {
+          return IconButton(
+            icon: SvgPicture.asset("assets/icons/menu.svg"),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          );
+        },
+      ),
+      centerTitle: false,
+      title: const Text(
+        'Google Maps',
+        style: TextStyle(color: kBackgroundColor),
+      ),
+      elevation: 0,
+      backgroundColor: kPrimaryColor,
+      // actions: [
+      //   if (_origin != null)
+      //     TextButton(
+      //       onPressed: () => _googleMapController.animateCamera(
+      //         CameraUpdate.newCameraPosition(
+      //           CameraPosition(
+      //             target: _origin!.position,
+      //             zoom: 14.5,
+      //             tilt: 50.0,
+      //           ),
+      //         ),
+      //       ),
+      //       style: TextButton.styleFrom(
+      //         primary: Colors.green,
+      //         textStyle: const TextStyle(fontWeight: FontWeight.w600),
+      //       ),
+      //       child: const Text('ORIGIN'),
+      //     ),
+      //   if (_destination != null)
+      //     TextButton(
+      //       onPressed: () => _googleMapController.animateCamera(
+      //         CameraUpdate.newCameraPosition(
+      //           CameraPosition(
+      //             target: _destination!.position,
+      //             zoom: 14.5,
+      //             tilt: 50.0,
+      //           ),
+      //         ),
+      //       ),
+      //       style: TextButton.styleFrom(
+      //         primary: Colors.blue,
+      //         textStyle: const TextStyle(fontWeight: FontWeight.w600),
+      //       ),
+      //       child: const Text('DEST'),
+      //     )
+      // ],
+    );
   }
+
+  // void _addMarker(LatLng pos) async {
+  //   if (_origin == null || (_origin != null && _destination != null)) {
+  //     // Origin is not set OR Origin/Destination are both set
+  //     // Set origin
+  //     setState(() {
+  //       _origin = Marker(
+  //         markerId: const MarkerId('origin'),
+  //         infoWindow: const InfoWindow(title: 'Origin'),
+  //         icon:
+  //             BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+  //         position: pos,
+  //       );
+  //       // Reset destination
+  //       _destination = null;
+
+  //       // Reset info
+  //       _info = null;
+  //     });
+  //   } else {
+  //     // Origin is already set
+  //     // Set destination
+  //     setState(() {
+  //       _destination = Marker(
+  //         markerId: const MarkerId('destination'),
+  //         infoWindow: const InfoWindow(title: 'Destination'),
+  //         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+  //         position: pos,
+  //       );
+  //     });
+
+  //     // Get directions
+  //     final directions = await DirectionsRepository()
+  //         .getDirections(origin: _origin!.position, destination: pos);
+  //     setState(() => _info = directions);
+  //   }
+  // }
 }
